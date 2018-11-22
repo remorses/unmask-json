@@ -8,6 +8,16 @@ console.log(unmask({
     name: 234,
     bool: true,
     obj: [
-      "sdfg", "asdg"]
+      {
+        complex: 1234,
+        masked: "sdfe",
+        very: {name: 234}
+      },
+      {
+        complex: 1234,
+        masked: "sdfe",
+        very: {name: 1234}
+      },
+    ]
   }
-}))
+}, 1))

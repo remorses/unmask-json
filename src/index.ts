@@ -1,4 +1,5 @@
-
+import * as fs from 'fs'
+import c = require('colors')
 const zip = (arr1, arr2) => {
   let result
   if (arr1.length !== arr2.length) throw new Error('arrays length must be equeal')
@@ -7,7 +8,7 @@ const zip = (arr1, arr2) => {
   })
 }
 
-export const unmask = (object, indents = 0): string => {
+export const unmask = (object, indents = 0) => {
 
   const keys = Object.keys(object).map(s => s.toString())
   const values = keys.map(key => object[key])
@@ -35,9 +36,6 @@ const smallFirst = (a, b) => {
 const reducer = (state, { key, value }) => {
 
   const { result, indents, iterations, total } = state
-  console.log(iterations, state)
-
-
 
   const indentation = '\t'.repeat(indents)
 
@@ -49,7 +47,7 @@ const reducer = (state, { key, value }) => {
       if (iterations == 0)
         return {
           ...state,
-          result: result  + '{\n' + indentation + '\t' + key + '\n',
+          result: result + '{\n' + indentation + '\t' + key + '\n',
           indents: indents + 1,
           iterations: iterations + 1
         }
@@ -75,7 +73,7 @@ const reducer = (state, { key, value }) => {
       if (iterations == 0)
         return {
           ...state,
-          result: result  + '{\n' + indentation + '\t' + key + ' ' + unmask(object, indents) + '\n',
+          result: result + '{\n' + indentation + '\t' + key + ' ' + unmask(object, indents) + '\n',
           indents: indents + 1,
           iterations: iterations + 1
         }
@@ -84,7 +82,7 @@ const reducer = (state, { key, value }) => {
       if (iterations === total - 1)
         return {
           ...state,
-          result: result + indentation + key + ' ' + unmask(object, indents) + '\t'.repeat(indents - 1)+ '}\n',
+          result: result + indentation + key + ' ' + unmask(object, indents) + '\t'.repeat(indents - 1) + '}\n',
           indents: indents - 1,
           iterations: iterations + 1
         }
@@ -97,4 +95,25 @@ const reducer = (state, { key, value }) => {
 
 
   }
+}
+
+const unmaskJson = (json, indents) => {
+  const object = JSON.parse(json)
+  return unmask(object, indents)
+}
+
+export const error = (e: Error) => console.log(c.red(e.message))
+
+export const unmaskFile = (file: string, indents = 0) => {
+  const json = fs.readFileSync(file, 'utf8')
+  return unmaskJson(json, indents)
+
+}
+
+export const unmaskStream = (stdin, indents = 0) => {
+  let str = '';
+  stdin.setEncoding('utf8');
+  stdin.on('data', (chunk) => { str += chunk });
+  stdin.on('end', unmaskJson(str, indents));
+  stdin.resume();
 }
