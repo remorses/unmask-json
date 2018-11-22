@@ -1,6 +1,6 @@
 
 
-import { unmask } from '../src'
+const { unmask } = require(  '../src')
 
 console.log(unmask({
   name: "sdf",

@@ -1,0 +1,33 @@
+{
+	[1mname[22m
+	[1mversion[22m
+	[1mdescription[22m
+	[1mmain[22m
+	[1mbin[22m
+	[1mscripts[22m {
+		[1mtest[22m
+	}
+
+	[1mrepository[22m {
+		[1mtype[22m
+		[1murl[22m
+	}
+
+	[1mauthor[22m
+	[1mlicense[22m
+	[1mbugs[22m {
+		[1murl[22m
+	}
+
+	[1mhomepage[22m
+	[1mdependencies[22m {
+		[1m@types/colors[22m
+		[1m@types/mz[22m
+		[1m@types/node[22m
+		[1mcolors[22m
+		[1mcommander[22m
+		[1mmz[22m
+		[1mtypescript[22m
+	}
+}
+
