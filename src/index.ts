@@ -92,15 +92,3 @@ console.log(unmask({
     bool: true
   }
 }))
-
-
-
-  `
-{
-	users [{
-		id
-    name
-    errors { path }
-  }]
-}
-`
