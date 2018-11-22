@@ -58,7 +58,7 @@ const reducer = (state, { key, value }) => {
         return {
           ...state,
           result: result + indentation + key + '\n' + '\t'.repeat(indents - 1) + '}\n',
-          indents: 0,
+          indents: indents - 1,
           iterations: iterations + 1
         }
 
@@ -69,13 +69,13 @@ const reducer = (state, { key, value }) => {
       }
     case 'object':
       let object = value
-      if (value.constructor == Array) object = value[0]
 
+      if (value.constructor == Array) object = value[0]
 
       if (iterations == 0)
         return {
           ...state,
-          result: result  + '{\n' + indentation + '\t' + key + ' ' + unmask(object, indents + 1) + '\n',
+          result: result  + '{\n' + indentation + '\t' + key + ' ' + unmask(object, indents) + '\n',
           indents: indents + 1,
           iterations: iterations + 1
         }
@@ -84,30 +84,17 @@ const reducer = (state, { key, value }) => {
       if (iterations === total - 1)
         return {
           ...state,
-          result: result + indentation + key + ' ' + unmask(object, indents + 1) + '\t'.repeat(indents - 1)+ '}\n',
-          indents: 0,
+          result: result + indentation + key + ' ' + unmask(object, indents) + '\t'.repeat(indents - 1)+ '}\n',
+          indents: indents - 1,
           iterations: iterations + 1
         }
 
       return {
         ...state,
-        result: result + indentation + key + ' ' + unmask(object, indents + 1) + '\n',
-        indents: indents + 1,
+        result: result + indentation + key + ' ' + unmask(object, indents) + '\n',
         iterations: iterations + 1
       }
 
 
   }
 }
-
-
-
-console.log(unmask({
-
-  name: "sdf",
-  object: {
-    name: 234,
-    bool: true,
-
-  }
-}))

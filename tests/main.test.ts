@@ -6,6 +6,8 @@ console.log(unmask({
   name: "sdf",
   object: {
     name: 234,
-    bool: true
+    bool: true,
+    obj: [
+      "sdfg", "asdg"]
   }
 }))
