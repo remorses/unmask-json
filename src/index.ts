@@ -7,7 +7,7 @@ const zip = (arr1, arr2) => {
   })
 }
 
-export const unmask = (object): string => {
+export const unmask = (object, indents = 0): string => {
 
   const keys = Object.keys(object).map(s => s.toString())
   const values = keys.map(key => object[key])
@@ -15,7 +15,7 @@ export const unmask = (object): string => {
     .sort(smallFirst)
     .reduce(reducer, {
       result: '',
-      indents: 0,
+      indents: indents,
       iterations: 0,
       total: keys.length
     })
@@ -32,63 +32,82 @@ const smallFirst = (a, b) => {
 
 
 
-const reducer = ({ result, indents, iterations, total }, { key, value }) => {
+const reducer = (state, { key, value }) => {
 
-  const rest = {
-    iterations: iterations + 1,
-    total,
-    indents
-  }
+  const { result, indents, iterations, total } = state
+  console.log(iterations, state)
 
-  if (indents == 0)
-    return {
-      ...rest,
-      result: result + '{\n',
-      indents: indents + 1
-    }
 
-  if (iterations === total)
-    return {
-      ...rest,
-      result: result + '}',
-      indents: 0
-    }
 
-  const indentation = (<string>'\t').repeat(indents)
+  const indentation = '\t'.repeat(indents)
 
   switch (typeof value) {
     case null:
     case 'number':
     case 'string':
     case 'boolean':
+      if (iterations == 0)
+        return {
+          ...state,
+          result: result  + '{\n' + indentation + '\t' + key + '\n',
+          indents: indents + 1,
+          iterations: iterations + 1
+        }
+
+      if (iterations === total - 1)
+        return {
+          ...state,
+          result: result + indentation + key + '\n' + '\t'.repeat(indents - 1) + '}\n',
+          indents: 0,
+          iterations: iterations + 1
+        }
+
       return {
-        ...rest,
-        result: result + key + '\n',
-        indents
+        ...state,
+        result: result + indentation + key + '\n',
+        iterations: iterations + 1
       }
     case 'object':
       let object = value
       if (value.constructor == Array) object = value[0]
 
-      const keys = Object.keys(object).map(s => s.toString())
-      const values = keys.map(key => object[key])
-      return zip(keys, values)
-        .sort(smallFirst)
-        .reduce(reducer, {
-          iterations: 0,
-          total: keys.length,
-          result,
-          indents
-        })
+
+      if (iterations == 0)
+        return {
+          ...state,
+          result: result  + '{\n' + indentation + '\t' + key + ' ' + unmask(object, indents + 1) + '\n',
+          indents: indents + 1,
+          iterations: iterations + 1
+        }
+
+
+      if (iterations === total - 1)
+        return {
+          ...state,
+          result: result + indentation + key + ' ' + unmask(object, indents + 1) + '\t'.repeat(indents - 1)+ '}\n',
+          indents: 0,
+          iterations: iterations + 1
+        }
+
+      return {
+        ...state,
+        result: result + indentation + key + ' ' + unmask(object, indents + 1) + '\n',
+        indents: indents + 1,
+        iterations: iterations + 1
+      }
+
+
   }
 }
 
 
 
 console.log(unmask({
+
   name: "sdf",
   object: {
     name: 234,
-    bool: true
+    bool: true,
+
   }
 }))
