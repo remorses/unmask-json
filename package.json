@@ -2,8 +2,8 @@
   "name": "unmask-json",
   "version": "1.0.0",
   "description": "Find the abstract structure of complex nested JSON objects.",
-  "main": "index.js",
-  "bin": "bin/index.js",
+  "main": "bin/unmask.js",
+  "bin": "bin/unmask.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

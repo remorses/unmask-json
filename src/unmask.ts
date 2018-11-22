@@ -10,28 +10,34 @@ export const unmaskJson = (json, indents) => {
 
 export const unmask = (object, indents = 0) => {
 
-  const keys = Object.keys(object).map(s => s.toString())
-  const values = keys.map(key => object[key])
-  const state = zip(keys, values)
-    .reduce(reducer, {
-      result: '',
-      indents: indents,
-      iterations: 0,
-      total: keys.length
-    })
+  if (object) {
+    const keys = Object.keys(object).map(s => s.toString())
+    const values = keys.map(key => object[key])
+    const state = zip(keys, values)
+      .filter(({ key }) => !!key)
+      .reduce(reducer, {
+        result: '',
+        indents: indents,
+        iterations: 0,
+        total: keys.length
+      })
+    return (state.result)
+
+  }
+  return ""
   // keys.map(console.log)
-  return (state.result)
 }
 
 
 
 const reducer = (state, { key, value }) => {
 
-  // key = c.bold(key)
+  key = c.dim(key)
+  const tab = c.gray('.\t')
 
   const { result, indents, iterations, total } = state
 
-  const indentation = '\t'.repeat(indents)
+  const indentation = tab.repeat(indents)
 
   switch (typeof value) {
     case null:
@@ -42,7 +48,7 @@ const reducer = (state, { key, value }) => {
       if (iterations == 0 && iterations === total - 1)
         return {
           ...state,
-          result: result + '{\n' + indentation + '\t' + key + '\n' + indentation + '}\n',
+          result: result + '{\n' + indentation + tab + key + '\n' + indentation + '}\n',
           indents: indents,
           iterations: iterations + 1
         }
@@ -50,7 +56,7 @@ const reducer = (state, { key, value }) => {
       if (iterations == 0)
         return {
           ...state,
-          result: result + '{\n' + indentation + '\t' + key + '\n',
+          result: result + '{\n' + indentation + tab + key + '\n',
           indents: indents + 1,
           iterations: iterations + 1
         }
@@ -58,7 +64,7 @@ const reducer = (state, { key, value }) => {
       if (iterations === total - 1)
         return {
           ...state,
-          result: result + indentation + key + '\n' + '\t'.repeat(indents - 1) + '}\n',
+          result: result + indentation + key + '\n' + tab.repeat(indents - 1) + '}\n',
           indents: indents - 1,
           iterations: iterations + 1
         }
@@ -71,13 +77,15 @@ const reducer = (state, { key, value }) => {
     case 'object':
       let object = value
 
-      if (value.constructor == Array) object = value[0]
+      if (value && value["constructor"] == Array && typeof value[0] === 'object') object = value[0]
+      if (value && value["constructor"] == Array && typeof value[0] === 'object') object = value[0]
+      if (value && value["constructor"] == Array && typeof value[0] !== 'object') object = {"[]": "testing"}
 
 
       if (iterations == 0 && iterations === total - 1)
         return {
           ...state,
-          result: result + '{\n' + indentation + '\t' + key + ' ' + unmask(object, indents) + indentation + '}\n',
+          result: result + '{\n' + indentation + tab + key + ' ' + unmask(object, indents + 1) + indentation + '}\n',
           indents: indents + 1,
           iterations: iterations + 1
         }
@@ -85,7 +93,7 @@ const reducer = (state, { key, value }) => {
       if (iterations === 0)
         return {
           ...state,
-          result: result + '{\n' + indentation + '\t' + key + ' ' + unmask(object, indents) + '\n',
+          result: result + '{\n' + indentation + tab + key + ' ' + unmask(object, indents),
           indents: indents + 1,
           iterations: iterations + 1
         }
@@ -94,16 +102,20 @@ const reducer = (state, { key, value }) => {
       if (iterations === total - 1)
         return {
           ...state,
-          result: result + indentation + key + ' ' + unmask(object, indents) + '\t'.repeat(indents - 1) + '}\n',
+          result: result + indentation + key + ' ' + unmask(object, indents) + tab.repeat(indents - 1) + '}\n',
           indents: indents - 1,
           iterations: iterations + 1
         }
 
       return {
         ...state,
-        result: result + indentation + key + ' ' + unmask(object, indents) + '\n',
+        result: result + indentation + key + ' ' + unmask(object, indents) ,
         iterations: iterations + 1
       }
+
+    default:
+      console.log("strange type", value)
+      return state
 
 
   }
