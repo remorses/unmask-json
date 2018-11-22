@@ -7,10 +7,19 @@ const zip = (arr1, arr2) => {
   })
 }
 
-const unmask = (object) => {
+export const unmask = (object): string => {
+
   const keys = Object.keys(object).map(s => s.toString())
   const values = keys.map(key => object[key])
-  zip(keys, values).sort(smallFirst).reduce(reducer, "")
+  const state = zip(keys, values)
+    .sort(smallFirst)
+    .reduce(reducer, {
+      result: '',
+      indents: 0,
+      iterations: 0,
+      total: keys.length
+    })
+  return state.result
 }
 
 const smallFirst = (a, b) => {
@@ -25,14 +34,11 @@ const smallFirst = (a, b) => {
 
 const reducer = ({ result, indents, iterations, total }, { key, value }) => {
 
-
-
   const rest = {
     iterations: iterations + 1,
     total,
     indents
   }
-
 
   if (indents == 0)
     return {
@@ -49,8 +55,6 @@ const reducer = ({ result, indents, iterations, total }, { key, value }) => {
     }
 
   const indentation = (<string>'\t').repeat(indents)
-
-
 
   switch (typeof value) {
     case null:
@@ -72,7 +76,7 @@ const reducer = ({ result, indents, iterations, total }, { key, value }) => {
         .sort(smallFirst)
         .reduce(reducer, {
           iterations: 0,
-          total: 0,
+          total: keys.length,
           result,
           indents
         })
@@ -81,11 +85,17 @@ const reducer = ({ result, indents, iterations, total }, { key, value }) => {
 
 
 
+console.log(unmask({
+  name: "sdf",
+  object: {
+    name: 234,
+    bool: true
+  }
+}))
 
 
 
-
-`
+  `
 {
 	users [{
 		id
