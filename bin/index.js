@@ -10,7 +10,4 @@ program
   .option("-i, --indents", "Set starting indents", 0)
   .parse(process.argv);
 
-program.file ? console.log(unmaskFile(program.file, program.indents)) : null;
-program.stream
-  ? console.log(unmaskStream(process.stdin, program.indents))
-  : null;
+console.log(unmaskFile(program.file, program.indents));

@@ -27,7 +27,7 @@ export const unmask = (object, indents = 0) => {
 
 const reducer = (state, { key, value }) => {
 
-  key = c.bold(key)
+  // key = c.bold(key)
 
   const { result, indents, iterations, total } = state
 
