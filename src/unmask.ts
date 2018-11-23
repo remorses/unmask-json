@@ -32,12 +32,13 @@ export const unmask = (object, indents = 0) => {
 
 const reducer = (state, { key, value }) => {
 
-  key = c.dim(key)
+  // key = c.cyan(key)
   const tab = c.gray('.\t')
 
   const { result, indents, iterations, total } = state
 
   const indentation = tab.repeat(indents)
+
 
   switch (typeof value) {
     case null:
@@ -77,9 +78,17 @@ const reducer = (state, { key, value }) => {
     case 'object':
       let object = value
 
-      if (value && value["constructor"] == Array && typeof value[0] === 'object') object = value[0]
-      if (value && value["constructor"] == Array && typeof value[0] === 'object') object = value[0]
-      if (value && value["constructor"] == Array && typeof value[0] !== 'object') object = {"[]": "testing"}
+
+      if (object && object["constructor"] == Array && typeof object[0] !== 'object') {
+        key = key + '[' + object.length + ']'
+        object = { '...': '' }
+      }
+
+      while (object && object["constructor"] == Array) {
+        key = key + '[' + object.length + ']'
+        object = object[0]
+      }
+
 
 
       if (iterations == 0 && iterations === total - 1)
@@ -109,7 +118,7 @@ const reducer = (state, { key, value }) => {
 
       return {
         ...state,
-        result: result + indentation + key + ' ' + unmask(object, indents) ,
+        result: result + indentation + key + ' ' + unmask(object, indents),
         iterations: iterations + 1
       }
 
