@@ -2,13 +2,9 @@ import { smallFirst, zip } from './helpers'
 import c = require('colors')
 
 
-export const unmaskJson = (json, indents) => {
-  const object = JSON.parse(json)
-  return unmask(object, indents)
-}
 
 
-export const unmask = (object, indents = 0) => {
+export const unmask = (object, indents) => {
 
   if (object) {
     const keys = Object.keys(object).map(s => s.toString())
@@ -33,7 +29,7 @@ export const unmask = (object, indents = 0) => {
 const reducer = (state, { key, value }) => {
 
   // key = c.cyan(key)
-  const tab = c.gray('.\t')
+  const tab = !global['raw'] ? c.gray('.\t') : '\t'
 
   const { result, indents, iterations, total } = state
 
