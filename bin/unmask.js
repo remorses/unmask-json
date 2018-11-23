@@ -13,7 +13,7 @@ program
     "-s, --stream ",
     "Outputs the structure from a JSON stream, using cat file > unmask."
   )
-  .option("-i, --indents", "Set starting indentation.", 1)
+  .option("-i, --indents", "Set starting indentation.", 0)
   .parse(process.argv);
 
 if (program.raw) global.raw = true;
@@ -23,7 +23,10 @@ if (!program.file) {
   process.exit(1);
 }
 console.log(
-  program.file.split(".")[0] +
+  program.file
+    .split("/")
+    .reverse()[0]
+    .split(".")[0] +
     " " +
-    unmaskFile(program.file, program.indents, program.raw)
+    unmaskFile(program.file, program.indents)
 );

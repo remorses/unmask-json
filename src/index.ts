@@ -3,7 +3,7 @@ import {  unmask } from './unmask'
 import { logErr } from './helpers';
 import { removeComments } from './helpers'
 
- const unmaskFile = (file: string, indents = 1) => {
+ const unmaskFile = (file: string, indents = 0) => {
   if (file.split('.').reverse()[0] === 'json')  {
     const json = fs.readFileSync(file, 'utf8')
     const object = JSON.parse(removeComments(json))

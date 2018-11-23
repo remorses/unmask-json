@@ -14,6 +14,9 @@ export const smallFirst = (a, b) => {
   if (typeof a == 'string') return -1
   if (typeof a == 'number') return -1
   if (typeof a == 'boolean') return -1
+  if (typeof a == 'object' && typeof b == 'object')
+    return Object.keys(a).length < Object.keys(b).length ? -1 : 1
+  if (typeof a == 'object') return 1
   return 0
 }
 
