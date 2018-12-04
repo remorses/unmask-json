@@ -7,7 +7,7 @@ const c = require("colors");
 
 program
   .option("-f, --file <file>", "Outputs the structure of a JSON file.")
-  .option("-r, --raw", "Remove colors and points that mark tabs. Useful when writing to a file")
+  .option("-r, --raw", "Remove colors and points that mark tabs. Useful when writing to a file", false)
   .option("-s, --stream ", "Outputs the structure from a JSON stream, using cat file > unmask.")
   .option("-i, --indents", "Set starting indentation.", 0)
   .parse(process.argv)
@@ -29,7 +29,7 @@ if (program.file) {
   getStdin()
     .then(str => {
       console.log(
-        unmaskStream(str, program.indents)
+        unmaskStream(str, program.indents || 0)
       )
     })
 
