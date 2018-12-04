@@ -1,7 +1,7 @@
 import { smallFirst, zip } from './helpers'
 import c = require('colors')
 
-
+if (!global['raw']) c.enabled = true
 
 
 export const unmask = (object, indents) => {

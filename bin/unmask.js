@@ -12,7 +12,12 @@ program
   .option("-i, --indents", "Set starting indentation.", 0)
   .parse(process.argv)
 
-if (program.raw) global.raw = true;
+if (program.raw) {
+  global.raw = true;
+} else {
+  global.raw = false;
+  c.enabled = true
+}
 
 if (program.file) {
 
