@@ -19,7 +19,7 @@ export const unmask = (object, indents) => {
     return (state.result)
 
   }
-  return " "
+  return "_"
   // keys.map(console.log)
 }
 
@@ -27,12 +27,16 @@ export const unmask = (object, indents) => {
 
 const reducer = (state, { key, value }) => {
 
-  // key = c.cyan(key)
+  key = c.white(key)
+
   const tab = !global['raw'] ? c.gray('.\t') : '\t'
 
   const { result, indents, iterations, total } = state
 
   const indentation = tab.repeat(indents)
+
+  const isFirst = iterations == 0
+  const isLast = iterations === total - 1
 
 
   switch (typeof value) {
@@ -42,7 +46,7 @@ const reducer = (state, { key, value }) => {
     case 'boolean':
 
 
-      if (iterations == 0 && iterations === total - 1)
+      if (isFirst && isLast)
         return {
           ...state,
           result: result + '{\n' + indentation + tab + key + '\n' + indentation + '}\n',
@@ -50,7 +54,7 @@ const reducer = (state, { key, value }) => {
           iterations: iterations + 1
         }
 
-      if (iterations == 0)
+      if (isFirst)
         return {
           ...state,
           result: result + '{\n' + indentation + tab + key + '\n',
@@ -58,7 +62,7 @@ const reducer = (state, { key, value }) => {
           iterations: iterations + 1
         }
 
-      if (iterations === total - 1)
+      if (isLast)
         return {
           ...state,
           result: result + indentation + key + '\n' + tab.repeat(indents - 1) + '}\n',
@@ -77,10 +81,10 @@ const reducer = (state, { key, value }) => {
 
       if (object && object["constructor"] == Array && typeof object[0] !== 'object') {
         key = key + '[' + object.length + ']'
-        object = { '...': 'dsf' }
+        object = { '...': '_' }
       }
       if (Object.keys(object).length === 0) {
-        object = { ' ': 'dsf' }
+        object = { '_': '_' }
       }
 
       while (object && object["constructor"] == Array && typeof object[0] === 'object') {
@@ -91,7 +95,7 @@ const reducer = (state, { key, value }) => {
 
 
 
-      if (iterations == 0 && iterations === total - 1)
+      if (isFirst && isLast)
         return {
           ...state,
           result: result  + '{\n' + indentation + tab + key + ' ' + unmask(object, indents + 1) + indentation + '}\n',
