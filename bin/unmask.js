@@ -14,6 +14,7 @@ program
 
 if (program.raw) {
   global.raw = true;
+  c.enabled = false
 } else {
   global.raw = false;
   c.enabled = true

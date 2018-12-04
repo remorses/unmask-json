@@ -27,7 +27,7 @@ export const unmask = (object, indents) => {
 
 const reducer = (state, { key, value }) => {
 
-  key = c.white(key)
+
 
   const tab = !global['raw'] ? c.gray('.\t') : '\t'
 
