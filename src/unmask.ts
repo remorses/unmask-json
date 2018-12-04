@@ -10,7 +10,7 @@ export const unmask = (object, indents) => {
     const keys = Object.keys(object).map(s => s.toString())
     const values = keys.map(key => object[key])//.sort(smallFirst)
     const state = zip(keys, values)
-      .map(({ key }) => !!key)
+      .filter(({ key }) => !!key)
       .reduce(reducer, {
         result: '',
         indents: indents,
