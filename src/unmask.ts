@@ -92,7 +92,7 @@ const reducer = (state, { key, value }) => {
       while (object["constructor"] == Array && typeof object[0] === 'object') {
         key = key + '[' + object.length + ']'
 
-        object = object.sort((a, b) => Object.keys(a).length < Object.keys(b).length ? -1 : 1)
+        object = object.sort((a, b) => Object.keys(a).length > Object.keys(b).length ? -1 : 1)
         object = object[0]
 
         if (!object) {
