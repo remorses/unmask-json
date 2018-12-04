@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import c = require ("colors")
 import { unmask } from './unmask'
 import { logErr } from './helpers';
 import { removeComments } from './helpers'
@@ -20,7 +21,7 @@ const unmaskStream = (json, indents = 0) => {
     return unmask(object, indents)
   }
   catch{
-    return 'unable to parse'
+    return c.red('unable to parse object')
   }
 
 }
