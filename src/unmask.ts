@@ -8,7 +8,7 @@ export const unmask = (object, indents) => {
 
   if (object) {
     const keys = Object.keys(object).map(s => s.toString())
-    const values = keys.map(key => object[key]).sort(smallFirst)
+    const values = keys.map(key => object[key])//.sort(smallFirst)
     const state = zip(keys, values)
       .reduce(reducer, {
         result: '',
@@ -89,7 +89,9 @@ const reducer = (state, { key, value }) => {
 
       while (object && object["constructor"] == Array && typeof object[0] === 'object') {
         key = key + '[' + object.length + ']'
-        object = object.sort((a, b) => Object.keys(a).length < Object.keys(b).length ? -1 : 1)[0]
+
+        // object = object.sort((a, b) => Object.keys(a).length < Object.keys(b).length ? -1 : 1)[0]
+        object = object[0]
       }
 
 
