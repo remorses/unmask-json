@@ -15,8 +15,14 @@ const unmaskFile = (file: string, indents = 0) => {
 }
 
 const unmaskStream = (json, indents = 0) => {
-  const object = JSON.parse(removeComments(json))
-  return unmask(object, indents)
+  try{
+    const object = JSON.parse(removeComments(json))
+    return unmask(object, indents)
+  }
+  catch{
+    return 'unable to parse'
+  }
+
 }
 
 
