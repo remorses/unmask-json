@@ -1,10 +1,10 @@
 import * as fs from 'fs'
-import {  unmask } from './unmask'
+import { unmask } from './unmask'
 import { logErr } from './helpers';
 import { removeComments } from './helpers'
 
- const unmaskFile = (file: string, indents = 0) => {
-  if (file.split('.').reverse()[0] === 'json')  {
+const unmaskFile = (file: string, indents = 0) => {
+  if (file.split('.').reverse()[0] === 'json') {
     const json = fs.readFileSync(file, 'utf8')
     const object = JSON.parse(removeComments(json))
     return unmask(object, indents)
@@ -14,12 +14,9 @@ import { removeComments } from './helpers'
 
 }
 
- const unmaskStream = (stdin, indents = 1) => {
-  let str = '';
-  stdin.setEncoding('utf8');
-  stdin.on('data', (chunk) => { str += chunk });
-  stdin.on('end', unmask(JSON.parse(removeComments(str)), indents));
-  stdin.resume();
+const unmaskStream = (json, indents = 1) => {
+  const object = JSON.parse(removeComments(json))
+  return unmask(object, indents)
 }
 
 
