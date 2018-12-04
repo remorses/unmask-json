@@ -83,24 +83,24 @@ const reducer = (state, { key, value }) => {
         object = { '_': '_' }
       }
 
-      if (object && object["constructor"] == Array && typeof object[0] !== 'object') {
+      if ( object["constructor"] == Array && typeof object[0] !== 'object') {
         key = key + '[' + object.length + ']'
         object = { '...': '_' }
       }
 
 
-      while (object && object["constructor"] == Array && typeof object[0] === 'object') {
+      while (object["constructor"] == Array && typeof object[0] === 'object') {
         key = key + '[' + object.length + ']'
 
-        // object = object.sort((a, b) => Object.keys(a).length < Object.keys(b).length ? -1 : 1)[0]
+        object = object.sort((a, b) => Object.keys(a).length < Object.keys(b).length ? -1 : 1)
         object = object[0]
+
+        if (!object) {
+          object = { '_': '_' }
+        }
       }
 
-      if (object && object === {}) {
-        object = { '_': '_' }
-      }
-
-      if (object && Object.keys(object).length === 0) {
+      if (Object.keys(object).length === 0) {
         object = { '_': '_' }
       }
 
