@@ -79,7 +79,9 @@ const reducer = (state, { key, value }) => {
     case 'object':
       let object = value
 
-
+      if (!object) {
+        object = { '_': '_' }
+      }
 
       if (object && object["constructor"] == Array && typeof object[0] !== 'object') {
         key = key + '[' + object.length + ']'
@@ -94,11 +96,11 @@ const reducer = (state, { key, value }) => {
         object = object[0]
       }
 
-      if (object === {}) {
+      if (object && object === {}) {
         object = { '_': '_' }
       }
 
-      if (Object.keys(object).length === 0) {
+      if (object && Object.keys(object).length === 0) {
         object = { '_': '_' }
       }
 
