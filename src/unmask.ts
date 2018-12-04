@@ -80,13 +80,12 @@ const reducer = (state, { key, value }) => {
       let object = value
 
 
+
       if (object && object["constructor"] == Array && typeof object[0] !== 'object') {
         key = key + '[' + object.length + ']'
         object = { '...': '_' }
       }
-      if (Object.keys(object).length === 0) {
-        object = { '_': '_' }
-      }
+
 
       while (object && object["constructor"] == Array && typeof object[0] === 'object') {
         key = key + '[' + object.length + ']'
@@ -95,7 +94,13 @@ const reducer = (state, { key, value }) => {
         object = object[0]
       }
 
+      if (object === {}) {
+        object = { '_': '_' }
+      }
 
+      if (Object.keys(object).length === 0) {
+        object = { '_': '_' }
+      }
 
 
       if (isFirst && isLast)
@@ -106,7 +111,7 @@ const reducer = (state, { key, value }) => {
           iterations: iterations + 1
         }
 
-      if (iterations === 0)
+      if (isFirst)
         return {
           ...state,
           result: result + '{\n' + indentation + tab + key + ' ' + unmask(object, indents + 1),
@@ -115,7 +120,7 @@ const reducer = (state, { key, value }) => {
         }
 
 
-      if (iterations === total - 1)
+      if (isLast)
         return {
           ...state,
           result: result  + indentation + key + ' ' + unmask(object, indents) + tab.repeat(indents - 1) + '}\n',
